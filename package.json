@@ -4,8 +4,18 @@
   "description": "mvvm",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rollup -c",
+    "dev": "webpack-dev-server --inline --hot"
   },
   "author": "asuishi",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "html-webpack-plugin": "^2.26.0",
+    "rollup": "^0.41.1",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-json": "^2.1.0",
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2"
+  }
 }
