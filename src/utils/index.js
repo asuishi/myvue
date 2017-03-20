@@ -1,3 +1,4 @@
 const toString = {}.toString;
+const slice = Array.prototype.slice;
 
-export default {toString}
+export default {toString,slice}

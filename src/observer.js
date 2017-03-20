@@ -1,9 +1,16 @@
-import util from './utils/index';
+/**
+ * @authors     : asuishi
+ * @date        : 17-3-19
+ * @version     : 1.0
+ * @description : Observer，实现对viewModel的监视，当发生变更时发出变更消息
+ */
+
+import Dep from './dep'
 
 export default class Observer{
 	constructor(data){
-		Object.assign(this,data);
-		this.walk(this);
+		this.data = data;
+		this.walk(data);
 	}
 
 	walk(data){
@@ -16,17 +23,21 @@ export default class Observer{
 		})	
 	}
 	defineReactive(obj,key,val){
+		let dep = new Dep();
 		Object.defineProperty(obj,key,{
 			get(){
-				console.log("get is invoke");
+				if(Dep.target){
+					// (dep.subs.indexOf(Dep.target)<0 ) && dep.addSub(Dep.target);
+					dep.addSub(Dep.target);
+				}
 				return val;
 			},
 			set(v){
 				if(v == val){
 					return;
 				}
-				console.log("set is invoke");
 				val = v;
+				dep.notify();
 			}
 		});
 	}

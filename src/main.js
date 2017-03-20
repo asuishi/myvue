@@ -1,12 +1,9 @@
 import observer from "./observer"
+import compiler from "./compiler"
 
-class myvue{
-	constructor(elememt,data){
-		this._data = new observer(data);
-		console.log(this._data.a);
-		this._data.a =5;
-		console.log(this._data.a);
+export default class myvue{
+	constructor(element,data){
+		this._data = (new observer(data)).data;
+		new compiler(element,data);
 	}
 }
-
-var ob = new myvue('',{a:3});

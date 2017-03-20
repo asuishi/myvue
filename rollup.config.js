@@ -3,8 +3,9 @@
 
 export default {
 	entry:"src/main.js",
-	format:"cjs",
+	format:"umd",
+	 moduleName: 'myvue',
 	// plugins:[json()],
 	dest:'./dist/bundle.js',
-	// sourceMap:true,
+	sourceMap:true,
 }
