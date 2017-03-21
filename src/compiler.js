@@ -1,6 +1,8 @@
 import utils from './utils/index';
 
-import watcher from './watcher'
+import watcher from './watcher';
+
+import updater from './updater'
 
 export default class Compiler{
 	constructor(el,vm){
@@ -30,32 +32,54 @@ export default class Compiler{
 	compileTextNode(node){
 		let reg = /\{\{([^\{\}]*)\}\}/;
 		if(reg.test(node.nodeValue)){
-			let name = RegExp.$1.trim();
-			// node.nodeValue = this.$vm[directive];
-			new watcher(name,this.$vm,(newValue)=>{
-				node.nodeValue = newValue;
-			})
+			let exp = RegExp.$1.trim();
+			this.textHandler(exp,this.$vm,node,'text');
 		}
 	}
-
+	/**
+		节点元素，可能的指令有 
+		v-model, v-text, v-bind, v-on, v-for, v-if等
+	*/
 	compileElementNode(node){
 		utils.slice.call(node.attributes).forEach(attr =>{
-			if(attr.nodeName === 'v-model'){
-				let name = attr.nodeValue
-				// node.value = this.$vm[name];
-
-				node.addEventListener('input',(e)=>{
-					this.$vm[name] = e.target.value;
-
-				})
-				new watcher(name,this.$vm,(newValue)=>{
-					node.value = newValue;
-				})
-				node.removeAttribute('v-model');
+			let directive = getDirective(attr.name);
+			if(directive.type){
+				let exp = attr.nodeValue
+				this[directive.type+'Handler'](exp,this.$vm,node,directive.type,directive.prop)	
 			}
 
 		});
 	}
+
+	/**
+		系列指令处理函数 model text on
+	*/
+	modelHandler(exp,scope,node,dir){
+		node.addEventListener('input',(e)=>{
+			scope[exp] = e.target.value;
+		});
+		this.bindWatch(node,scope,exp,dir);
+		node.removeAttribute('v-model');
+	}
+
+	textHandler(exp,scope,node,dir){
+		this.bindWatch(node,scope,exp,dir);
+	}
+
+	onHandler(exp,scope,node,dir,prop){
+		node.addEventListener(prop,(e)=>{
+			scope[exp](e);
+		})
+		node.removeAttribute('v-on:' + prop);
+	}
+
+	bindWatch(node,scope,exp,dir){
+		let fn = updater[dir];
+		new watcher(exp,scope,(newValue)=>{
+			fn(node,newValue);
+		});
+	}
+
 }
 
 function nodeToFragment(node){
@@ -65,4 +89,14 @@ function nodeToFragment(node){
 		fragment.append(child);
 	}
 	return fragment;
+}
+
+function getDirective(attrName){
+	const directive = {};
+	if(attrName.indexOf('v-')>-1){
+		let parse = attrName.slice(2).split(":");
+		directive.type = parse[0];
+		directive.prop = parse[1];
+	}
+	return directive;
 }
