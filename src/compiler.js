@@ -26,6 +26,9 @@ export default class Compiler{
 				default:
 					break;		
 			}
+			if(ele.childNodes){
+				this.compiler(ele,vm);
+			}
 		})
 	}
 
@@ -45,7 +48,8 @@ export default class Compiler{
 			let directive = getDirective(attr.name);
 			if(directive.type){
 				let exp = attr.nodeValue
-				this[directive.type+'Handler'](exp,this.$vm,node,directive.type,directive.prop)	
+				this[directive.type+'Handler'](exp,this.$vm,node,directive.type,directive.prop);
+				node.removeAttribute(attr.name);
 			}
 
 		});
@@ -55,11 +59,21 @@ export default class Compiler{
 		系列指令处理函数 model text on
 	*/
 	modelHandler(exp,scope,node,dir){
+		let compositionLock = false;
+		node.addEventListener('compositionstart',(e)=>{
+			compositionLock = true;
+		});
+		node.addEventListener('compositionend',(e)=>{
+			compositionLock = false;
+			scope[exp] = e.target.value;
+		});
 		node.addEventListener('input',(e)=>{
+			if(compositionLock){
+				return;
+			}
 			scope[exp] = e.target.value;
 		});
 		this.bindWatch(node,scope,exp,dir);
-		node.removeAttribute('v-model');
 	}
 
 	textHandler(exp,scope,node,dir){
@@ -68,9 +82,8 @@ export default class Compiler{
 
 	onHandler(exp,scope,node,dir,prop){
 		node.addEventListener(prop,(e)=>{
-			scope[exp](e);
+			scope[exp].call(scope,e);
 		})
-		node.removeAttribute('v-on:' + prop);
 	}
 
 	bindWatch(node,scope,exp,dir){
