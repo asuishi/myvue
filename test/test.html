@@ -1,14 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="utf-8">
     <title>Webpack Sample Project</title>
-  </head>
-  <body>
+</head>
+
+<body>
     <div id='root'>
-    	<input type="text" v-model="text" />
-    	{{text}}
-      <button v-on:click="doclick">点击</button>
+        <input type="text" v-model="text" /> {{text}}{{childtext}}
+        <div>
+            <button v-on:click="doclick">点击</button>
+            <div v-text="text"></div>
+        </div>
+        <div>
+            <input type="checkbox" v-model="checkbox" />
+            <label for="checkbox">{{ checkbox }}</label>
+        </div>
+       <!--  <div>
+            <input type="checkbox" id="jack" value="Jack" v-model="checkArray">
+            <label for="jack">Jack</label>
+            <input type="checkbox" id="john" value="John" v-model="checkArray">
+            <label for="john">John</label>
+            <input type="checkbox" id="mike" value="Mike" v-model="checkArray">
+            <label for="mike">Mike</label>
+            <br>
+        
+            <label for="checkbox">{{ checkArray }}</label>
+        </div> -->
+        <!--  <div>
+            <input type="file" v-model="checkArray" />
+        </div> -->
+
+        <input type="radio" name="test" id="one" value="One" v-model="picked">
+        <label for="one">One</label>
+        <br>
+        <input type="radio" name="test" id="two" value="Two" v-model="picked">
+        <label for="two">Two</label>
+        <br>
+        <span>Picked: {{ picked }}</span>
     </div>
-  </body>
+</body>
+
 </html>

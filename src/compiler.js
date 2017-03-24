@@ -27,7 +27,7 @@ export default class Compiler{
 					break;		
 			}
 			if(ele.childNodes){
-				this.compiler(ele,vm);
+				this.compiler(ele,vm); //子节点
 			}
 		})
 	}
@@ -44,7 +44,8 @@ export default class Compiler{
 		v-model, v-text, v-bind, v-on, v-for, v-if等
 	*/
 	compileElementNode(node){
-		utils.slice.call(node.attributes).forEach(attr =>{
+		let attrs = utils.slice.call(node.attributes)
+		attrs.forEach(attr =>{
 			let directive = getDirective(attr.name);
 			if(directive.type){
 				let exp = attr.nodeValue
@@ -59,21 +60,52 @@ export default class Compiler{
 		系列指令处理函数 model text on
 	*/
 	modelHandler(exp,scope,node,dir){
-		let compositionLock = false;
-		node.addEventListener('compositionstart',(e)=>{
-			compositionLock = true;
-		});
-		node.addEventListener('compositionend',(e)=>{
-			compositionLock = false;
-			scope[exp] = e.target.value;
-		});
-		node.addEventListener('input',(e)=>{
-			if(compositionLock){
-				return;
-			}
-			scope[exp] = e.target.value;
-		});
-		this.bindWatch(node,scope,exp,dir);
+		switch(node.type){
+			case 'checkbox':
+				node.addEventListener('change',(e)=>{
+					let isArray = Array.isArray(scope[exp]);
+					if(isArray){   // 数组形式，待添加
+						let value = e.target.value;
+						// let index = scope[exp].indexOf(value);
+						// if(index>-1 && e.target.checked){  //
+						// 	scope[exp].push(value);
+						// }else if(index<0 && !e.target.checked){
+						// 	scope[exp].splice(index,1);
+						// }
+					}else{
+						scope[exp] = e.target.checked;
+					}
+				});
+				this.bindWatch(node,scope,exp,'checkbox');
+				break;
+			case 'radio':
+				node.addEventListener('change',(e)=>{
+					scope[exp] = e.target.value;
+				});
+				this.bindWatch(node,scope,exp,'radio');
+				break;	
+			case 'file':
+				console.log(node);
+				break
+			default:
+				let compositionLock = false;
+				node.addEventListener('compositionstart',(e)=>{
+					compositionLock = true;
+				});
+				node.addEventListener('compositionend',(e)=>{
+					compositionLock = false;
+					scope[exp] = e.target.value;
+				});
+				node.addEventListener('input',(e)=>{
+					if(compositionLock){
+						return;
+					}
+					scope[exp] = e.target.value;
+				});
+				this.bindWatch(node,scope,exp,dir);
+				break;
+		}
+		
 	}
 
 	textHandler(exp,scope,node,dir){
@@ -81,9 +113,10 @@ export default class Compiler{
 	}
 
 	onHandler(exp,scope,node,dir,prop){
-		node.addEventListener(prop,(e)=>{
-			scope[exp].call(scope,e);
-		})
+		if(!prop){
+			return console.error("事件绑定方式错误");
+		}
+		node.addEventListener(prop,scope[exp].bind(scope))
 	}
 
 	bindWatch(node,scope,exp,dir){
