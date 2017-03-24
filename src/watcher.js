@@ -13,13 +13,26 @@ export default class Watcher{
 
 	update(){
 		let newValue = this.get();
-		if(this.value !== this.newValue){
+		if(this.value !== newValue){
 			this.callback(newValue);
 			this.value = newValue;
 		}
 	}
 	
 	get(){
-		return this.scope[this.exp];
+		let result = '';
+		if(/\./.test(this.exp)){
+			console.log(this.scope);
+			let exps = this.exp.split('.');
+			result = this.scope[exps[0]];
+			exps = exps.slice(1);
+			exps.forEach(e =>{
+				result = result[e];
+			});
+		}else{
+			result = this.scope[this.exp];
+		}
+		
+		return result;
 	}
 }

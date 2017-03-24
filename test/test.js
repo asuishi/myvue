@@ -4,6 +4,14 @@ window.ob = new myvue('root',{
 	checkbox:false,
 	checkArray:[],
 	picked:'',
+	items: [
+      {message: 'Foo' },
+      {message: 'Bar' }
+    ],
+    items2: [
+      "Hello",
+      "World"
+    ],
 	doclick:function(){
 		this.text = "text"
 	}

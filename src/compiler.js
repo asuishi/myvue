@@ -9,7 +9,7 @@ export default class Compiler{
 		this.$el = document.getElementById(`${el}`);
 		this.$vm = vm;
 		this.$fragment = nodeToFragment(this.$el);
-		this.compiler(this.$fragment,this,vm);
+		this.compiler(this.$fragment,this.$vm,vm);
 		this.$el.appendChild(this.$fragment);
 
 	}
@@ -18,33 +18,32 @@ export default class Compiler{
 		utils.slice.call(fragment.childNodes).forEach(ele=>{
 			switch(ele.nodeType){
 				case 1:
-					this.compileElementNode(ele)
+					this.compileElementNode(ele,vm)
 					break;
 				case 3:
-					this.compileTextNode(ele);
+					this.compileTextNode(ele,vm);
 					break;
 				default:
 					break;		
 			}
-			if(ele.childNodes){
-				this.compiler(ele,vm); //子节点
-			}
 		})
 	}
 
-	compileTextNode(node){
+	compileTextNode(node,vm){
 		let reg = /\{\{([^\{\}]*)\}\}/;
 		if(reg.test(node.nodeValue)){
 			let exp = RegExp.$1.trim();
-			this.textHandler(exp,this.$vm,node,'text');
+			this.textHandler(exp,vm,node,'text');
 		}
+		this.compiler(node,vm);
 	}
 	/**
 		节点元素，可能的指令有 
 		v-model, v-text, v-bind, v-on, v-for, v-if等
 	*/
-	compileElementNode(node){
-		let attrs = utils.slice.call(node.attributes)
+	compileElementNode(node,vm){
+		let attrs = utils.slice.call(node.attributes);
+		let lazy = false;
 		attrs.forEach(attr =>{
 			let directive = getDirective(attr.name);
 			if(directive.type){
@@ -52,8 +51,14 @@ export default class Compiler{
 				this[directive.type+'Handler'](exp,this.$vm,node,directive.type,directive.prop);
 				node.removeAttribute(attr.name);
 			}
+			if(directive.type === 'for'){
+				lazy =true;
+			}
 
 		});
+		if(!lazy){
+			this.compiler(node,vm);
+		}
 	}
 
 	/**
@@ -117,6 +122,25 @@ export default class Compiler{
 			return console.error("事件绑定方式错误");
 		}
 		node.addEventListener(prop,scope[exp].bind(scope))
+	}
+
+	forHandler(exp,scope,node,dir){
+		let expObj = exp.split("in");
+		let newExp = expObj[1].trim();
+		let item = expObj[0].trim();
+		let parentNode = node.parentNode;
+		parentNode.removeChild(node);
+		node.removeAttribute("v-for");
+		new watcher(newExp,scope,(newValue)=>{
+			newValue.forEach((val,index) =>{
+				let clone = node.cloneNode(true);
+				let forscope = Object.create(scope);
+				forscope.$index = index;
+				forscope[item] = val;
+				parentNode.append(clone);
+				this.compiler(clone,forscope);
+			});
+		})
 	}
 
 	bindWatch(node,scope,exp,dir){
