@@ -9,8 +9,14 @@ window.ob = new myvue('root',{
       {message: 'Bar' }
     ],
     items2: [
+      [
       "Hello",
       "World"
+    	],
+    	[
+	      "Hello2",
+	      "World2"
+    	],
     ],
 	doclick:function(){
 		this.text = "text"

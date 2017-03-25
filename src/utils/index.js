@@ -29,5 +29,12 @@ function deepCopy(from) {
 	return r;
 }
 
+// 忽略注释节点和换行节点
+function isIgnorable(node) {
+	// ignore comment node || a text node
+	var regIgnorable = /^[\t\n\r]+$/;
+	return (node.nodeType == 8) || ((node.nodeType == 3) && (regIgnorable.test(node.textContent)));
+}
 
-export default {toString,slice,isEqual,deepCopy}
+
+export default {toString,slice,isEqual,deepCopy,isIgnorable}

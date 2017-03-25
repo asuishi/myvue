@@ -16,6 +16,9 @@ export default class Compiler{
 
 	compiler(fragment,vm){
 		utils.slice.call(fragment.childNodes).forEach(ele=>{
+			if(utils.isIgnorable(ele)){
+				return;
+			}
 			switch(ele.nodeType){
 				case 1:
 					this.compileElementNode(ele,vm)
@@ -48,7 +51,7 @@ export default class Compiler{
 			let directive = getDirective(attr.name);
 			if(directive.type){
 				let exp = attr.nodeValue
-				this[directive.type+'Handler'](exp,this.$vm,node,directive.type,directive.prop);
+				this[directive.type+'Handler'](exp,vm,node,directive.type,directive.prop);
 				node.removeAttribute(attr.name);
 			}
 			if(directive.type === 'for'){
@@ -129,18 +132,28 @@ export default class Compiler{
 		let newExp = expObj[1].trim();
 		let item = expObj[0].trim();
 		let parentNode = node.parentNode;
-		parentNode.removeChild(node);
+		let startNode = document.createTextNode('');
+		let endNode = document.createTextNode('');
+		let range = document.createRange();
+		parentNode.replaceChild(endNode, node); // 去掉原始模板
+		parentNode.insertBefore(startNode, endNode);
+		// parentNode.removeChild(node);
 		node.removeAttribute("v-for");
 		new watcher(newExp,scope,(newValue)=>{
-			while(parentNode.lastChild){
-				parentNode.removeChild(parentNode.lastChild);
-			}
+			// debugger
+			// while(parentNode.lastChild){
+			// 	parentNode.removeChild(parentNode.lastChild);
+			// }
+			range.setStart(startNode, 0);
+			range.setEnd(endNode, 0);
+			range.deleteContents();
 			newValue.forEach((val,index) =>{
 				let clone = node.cloneNode(true);
 				let forscope = Object.create(scope);
 				forscope.$index = index;
 				forscope[item] = val;
-				parentNode.append(clone);
+				parentNode.insertBefore(clone,endNode);
+				// debugger
 				this.compiler(clone,forscope);
 			});
 		})
@@ -172,7 +185,12 @@ function nodeToFragment(node){
 	let fragment = document.createDocumentFragment(),
 		child;
 	while(child = node.firstChild){
-		fragment.append(child);
+		if(utils.isIgnorable(child)){
+			node.removeChild(child);
+		}else{
+			fragment.append(child);
+		}
+		
 	}
 	return fragment;
 }
