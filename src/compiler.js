@@ -132,6 +132,9 @@ export default class Compiler{
 		parentNode.removeChild(node);
 		node.removeAttribute("v-for");
 		new watcher(newExp,scope,(newValue)=>{
+			while(parentNode.lastChild){
+				parentNode.removeChild(parentNode.lastChild);
+			}
 			newValue.forEach((val,index) =>{
 				let clone = node.cloneNode(true);
 				let forscope = Object.create(scope);

@@ -17,7 +17,7 @@
             <input type="checkbox" v-model="checkbox" />
             <label for="checkbox">{{ checkbox }}</label>
         </div>
-       <!--  <div>
+        <div>
             <input type="checkbox" id="jack" value="Jack" v-model="checkArray">
             <label for="jack">Jack</label>
             <input type="checkbox" id="john" value="John" v-model="checkArray">
@@ -27,7 +27,7 @@
             <br>
         
             <label for="checkbox">{{ checkArray }}</label>
-        </div> -->
+        </div>
         <!--  <div>
             <input type="file" v-model="checkArray" />
         </div> -->
@@ -52,9 +52,9 @@
           </li>
         </ul>
 
-        <div v-show="show">show direction</div>
+        <div v-show="show">{{text}}</div>
 
-        <div v-if="ifshow">show direction</div>
+        <div v-if="ifshow">{{text}}</div>
     </div>
 </body>
 

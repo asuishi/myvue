@@ -1,4 +1,5 @@
 import Dep from './dep'
+import utils from './utils/index'
 
 export default class Watcher{
 	constructor(exp,scope,callback){
@@ -13,16 +14,15 @@ export default class Watcher{
 
 	update(){
 		let newValue = this.get();
-		if(this.value !== newValue){
+		if(!utils.isEqual(this.value,newValue)){
 			this.callback(newValue);
-			this.value = newValue;
+			this.value = utils.deepCopy(newValue);
 		}
 	}
 	
 	get(){
 		let result = '';
 		if(/\./.test(this.exp)){
-			console.log(this.scope);
 			let exps = this.exp.split('.');
 			result = this.scope[exps[0]];
 			exps = exps.slice(1);
