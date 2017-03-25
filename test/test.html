@@ -8,7 +8,7 @@
 
 <body>
     <div id='root'>
-        <input type="text" v-model="text" /> {{text}}{{childtext}}
+        <input type="text" v-model="text" /> {{text}}
         <div>
             <button v-on:click="doclick">点击</button>
             <div v-text="text"></div>
@@ -51,6 +51,10 @@
             {{ item}}
           </li>
         </ul>
+
+        <div v-show="show">show direction</div>
+
+        <div v-if="ifshow">show direction</div>
     </div>
 </body>
 

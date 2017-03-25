@@ -21,5 +21,16 @@ export default {
 		}else{
 			node.checked = false;
 		}
+	},
+	show(node,val){
+		node.style.display = val?'initial':'none'; 
+	},
+
+	if:function(node,val,refNode){
+		if(val){
+			refNode.parentNode.insertBefore(node,refNode);
+		}else{
+			refNode.parentNode.removeChild(node);
+		}
 	}
 }

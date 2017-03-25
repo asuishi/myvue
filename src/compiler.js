@@ -143,10 +143,23 @@ export default class Compiler{
 		})
 	}
 
-	bindWatch(node,scope,exp,dir){
+	ifHandler(exp,scope,node,dir){
+		this.compiler(node, scope);
+		const refNode = document.createTextNode('');
+		node.parentNode.insertBefore(refNode,node);
+		node.parentNode.removeChild(node);
+		this.bindWatch(node,scope,exp,dir,refNode)
+		// this.bindWatch(node,scope,exp,dir);
+	}
+
+	showHandler(exp,scope,node,dir){
+		this.bindWatch(node,scope,exp,dir);
+	}
+
+	bindWatch(node,scope,exp,dir,prop){
 		let fn = updater[dir];
 		new watcher(exp,scope,(newValue)=>{
-			fn(node,newValue);
+			fn(node,newValue,prop);
 		});
 	}
 

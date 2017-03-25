@@ -14,5 +14,7 @@ window.ob = new myvue('root',{
     ],
 	doclick:function(){
 		this.text = "text"
-	}
+	},
+	show:true,
+	ifshow:true,
 });
