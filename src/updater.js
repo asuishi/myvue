@@ -10,7 +10,13 @@ export default {
 			node.checked = val;
 		}else{
 			let value = node.value;
-			console.log(value);
+			let index = val.indexOf(value);
+
+			if(index<0 && node.checked){
+				node.checked = false;
+			}else if(index>-1  && !node.checked){
+				node.checked = true;
+			}
 		}
 		
 	},

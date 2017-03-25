@@ -71,12 +71,12 @@ export default class Compiler{
 					let isArray = Array.isArray(scope[exp]);
 					if(isArray){   // 数组形式，待添加
 						let value = e.target.value;
-						// let index = scope[exp].indexOf(value);
-						// if(index>-1 && e.target.checked){  //
-						// 	scope[exp].push(value);
-						// }else if(index<0 && !e.target.checked){
-						// 	scope[exp].splice(index,1);
-						// }
+						let index = scope[exp].indexOf(value);
+						if(index<0 && e.target.checked){  //
+							scope[exp].push(value);
+						}else if(index>-1 && !e.target.checked){
+							scope[exp].splice(index,1);
+						}
 					}else{
 						scope[exp] = e.target.checked;
 					}
