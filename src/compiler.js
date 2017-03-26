@@ -49,6 +49,7 @@ export default class Compiler{
 		let lazy = false;
 		attrs.forEach(attr =>{
 			let directive = getDirective(attr.name);
+
 			if(directive.type){
 				let exp = attr.nodeValue
 				this[directive.type+'Handler'](exp,vm,node,directive.type,directive.prop);
@@ -172,12 +173,31 @@ export default class Compiler{
 		this.bindWatch(node,scope,exp,dir);
 	}
 
+	bindHandler(exp,scope,node,dir,prop){
+		switch(prop){
+			case 'class':
+				let originClass = node.getAttribute('class')?node.getAttribute('class') + ' ':'';
+				exp = '"' + originClass + '" +'+ utils.parseClassExp(exp,scope);
+				break;
+			case 'style':
+				console.log(typeof exp);
+				let originStyle = node.getAttribute('style')?node.getAttribute('style') + ' ':'';
+				exp = '"' + originStyle + ';" +'+ utils.parseStyleExp(exp,scope);
+				break;
+			default:
+				break;		
+		}
+		this.bindWatch(node,scope,exp,dir,prop)
+	}
+
 	bindWatch(node,scope,exp,dir,prop){
 		let fn = updater[dir];
 		new watcher(exp,scope,(newValue)=>{
 			fn(node,newValue,prop);
 		});
 	}
+
+
 
 }
 

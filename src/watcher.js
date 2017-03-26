@@ -22,17 +22,33 @@ export default class Watcher{
 	
 	get(){
 		let result = '';
-		if(/\./.test(this.exp)){
-			let exps = this.exp.split('.');
-			result = this.scope[exps[0]];
-			exps = exps.slice(1);
-			exps.forEach(e =>{
-				result = result[e];
-			});
-		}else{
-			result = this.scope[this.exp];
-		}
-		
+		result = computeExpression(this.exp,this.scope);
 		return result;
 	}
+}
+
+/**
+ * 解析表达式
+ */
+function computeExpression(exp, scope) {
+	let realExp = addScope(exp);
+	let fn = new Function('scope','return '  + realExp);
+	return fn(scope);
+}
+
+/**
+* 为变量添加作用域
+*/
+
+function addScope(exp){
+	let realExp;
+	const reg = /\(([^\(\)]+)\)/g;
+	if(reg.test(exp)){
+		realExp = exp.replace(reg,(match,group)=>{
+			return 'scope.' + group;
+		})
+	}else{
+		realExp = "scope." + exp;
+	}
+	return realExp;
 }

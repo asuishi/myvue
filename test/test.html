@@ -4,6 +4,19 @@
 <head>
     <meta charset="utf-8">
     <title>Webpack Sample Project</title>
+    <style>
+        #black {
+            background-color: black;
+            color: white;
+        }
+
+        .active{
+            background-color: blue;
+        }
+        .text-danger{
+            color: red
+        }
+    </style>
 </head>
 
 <body>
@@ -28,10 +41,6 @@
         
             <label for="checkbox">{{ checkArray }}</label>
         </div>
-        <!--  <div>
-            <input type="file" v-model="checkArray" />
-        </div> -->
-
         <input type="radio" name="test" id="one" value="One" v-model="picked">
         <label for="one">One</label>
         <br>
@@ -46,18 +55,44 @@
             {{ item.message }}
           </li>
         </ul>
-
-         <div v-for="item in items2">
-            {{$index}}
-            <div v-for="it in item" >
-                {{it}}
+        <ul>
+         <li class="main-data-list" v-for='item in items2'>
+            <p class="tab">{{item.tab}}</p>
+            <div class="show">
+                <ul >
+                    <li v-for='it in item.datalist'>
+                        <label >{{it.label}}</label>
+                    </li>
+                </ul>
             </div>
-        </div>
+        </li>
+        </ul>
          
 
         <div v-show="show">{{text}}</div>
 
         <div v-if="ifshow">{{text}}</div>
+
+
+        <div class="black">v-bind test</div>
+        <a v-bind:href="urlSrc" v-bind:id="id" target="_blank">{{urlSrc}} </a>
+
+        <div class="static static2 test"
+            v-bind:class="{ active: isActive, 'text-danger': hasError }">class object
+        </div>
+
+        <div  v-bind:class="[activeClass, errorClass]">
+            <span>{{activeClass}}</span>
+        </div>
+
+        <div v-bind:class="classObject">fsdfdsfsf</div>
+
+        <div v-bind:style="{ color: activeColor, font-size: fontSize + 'px' }">fdfdff</div>
+
+        <div style = "background-color: black" v-bind:style="[styleObjectA, styleObjectB]">{{styleObjectA}}</div>
+
+        <div v-bind:style="styleObject">styleObject</div></div>
+
     </div>
 </body>
 

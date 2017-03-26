@@ -38,5 +38,9 @@ export default {
 		}else{
 			refNode.parentNode.removeChild(node);
 		}
+	},
+
+	bind(node,val,attr){
+		node.setAttribute(attr, val);
 	}
 }
