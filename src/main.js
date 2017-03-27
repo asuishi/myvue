@@ -1,29 +1,83 @@
 import observer from "./observer"
 import compiler from "./compiler"
 
-export default class myvue{
-	constructor(element,data){
-		// this._data = (new observer(data)).data;
-		let _data = new observer(data);
-		this._proxy(_data,this)
-		new compiler(element,data);
-	}
+export default class myvue {
+    constructor(options) {
+        // this._data = (new observer(data)).data;
 
-	_proxy(data,vm){
-		for(let d in data.data){
-			Object.defineProperty(vm,d,{
-				enumerable  : true,    // 枚举
-	        	configurable: false,   // 不可再配置
-				get(){
-					return data.data[d];
-				},
-				set(v){
-					if(v == data.data[d]){
-						return;
-					}
-					data.data[d] = v;	
-				}
-			});
-		}
-	}
+        options = Object.assign({}, // 添加默认属性
+            {
+                computed: {},
+                methods: {},
+                data: {},
+            },
+            options
+        );
+
+        this.$options = options;
+        this.$data = options.data;
+
+        this.$el = typeof options.el === 'string' ? document.querySelector(options.el) : options.el || document.body;
+
+
+        new observer(this.$data);
+
+        this._proxy(options);
+        this._proxyComputed(options);
+        this._proxyMethods(options.methods);
+        new compiler(this.$el, this);
+    }
+
+    _proxy(options) {
+        const self = this;
+        for (let d in options.data) {
+            Object.defineProperty(self, d, {
+                enumerable: true, // 枚举
+                configurable: false, // 不可再配置
+                get() {
+                    return self.$data[d];
+                },
+                set(v) {
+                    if (v == self.$data[d]) {
+                        return;
+                    }
+                    self.$data[d] = v;
+                }
+            });
+        }
+    }
+
+    _proxyComputed(options) {
+        const self = this;
+        for (let d in options.computed) {
+            Object.defineProperty(self, d, {
+                enumerable: true, // 枚举
+                configurable: false, // 不可再配置
+                get() {
+                    if (self.$options.computed[d].get) {
+                        return self.$options.computed[d].get.call(self)
+                    } else {
+                        return self.$options.computed[d].call(self);
+                    }
+
+                },
+                set(v) {
+                    if (v == self.$options.computed[d]) {
+                        return;
+                    }
+                    if (self.$options.computed[d].set) {
+                        self.$options.computed[d].set.call(self, v)
+                    }
+                }
+            });
+        }
+    }
+        /**
+        	方法添加到 vm
+        */
+    _proxyMethods(methods) {
+        Object.keys(methods).forEach(m => {
+            this[m] = this.$options.methods[m];
+        });
+    }
 }

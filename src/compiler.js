@@ -6,7 +6,7 @@ import updater from './updater'
 
 export default class Compiler{
 	constructor(el,vm){
-		this.$el = document.getElementById(`${el}`);
+		this.$el =el;
 		this.$vm = vm;
 		this.$fragment = nodeToFragment(this.$el);
 		this.compiler(this.$fragment,this.$vm,vm);
