@@ -40,7 +40,7 @@ window.ob = new myvue({
 
 	  	styleObject: {
 		    color: 'red',
-		    fontSize: '13px'
+		    'font-size': '13px'
 		},
 		a:1,
 	},

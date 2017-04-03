@@ -51,7 +51,7 @@ export default class Compiler{
 			let directive = getDirective(attr.name);
 
 			if(directive.type){
-				let exp = attr.nodeValue
+				let exp = attr.value;
 				this[directive.type+'Handler'](exp,vm,node,directive.type,directive.prop);
 				node.removeAttribute(attr.name);
 			}
@@ -180,7 +180,6 @@ export default class Compiler{
 				exp = '"' + originClass + '" +'+ utils.parseClassExp(exp,scope);
 				break;
 			case 'style':
-				console.log(typeof exp);
 				let originStyle = node.getAttribute('style')?node.getAttribute('style') + ' ':'';
 				exp = '"' + originStyle + ';" +'+ utils.parseStyleExp(exp,scope);
 				break;

@@ -97,7 +97,6 @@ function parseStyleExp(exp,scope) {
 		});
 	}else{ // 第二种对象语法
 		let styles  = scope[exp];
-		console.log(styles);
 		for(let style in styles){
 			var key = '"' + style.replace(/['"`]/g, '') + ':"+';
 			var value = '(' + exp +'["' + style+ '"])';
