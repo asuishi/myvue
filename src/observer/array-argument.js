@@ -29,7 +29,7 @@ proxyMethods.forEach(method => {
                 insert = args.slice(2);
         }
         if (insert) {
-            ob.observeArray(insert);
+            ob.observeArray(insert,this);
         }
         ob.dep.notify();
         return result;

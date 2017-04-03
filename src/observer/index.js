@@ -46,6 +46,7 @@ class Observer {
                 return val;
             },
             set(newValue) {
+                console.log("set");
                 if (newValue == val) {
                     return;
                 }
@@ -61,11 +62,21 @@ class Observer {
      * 数组
      */
 
-    observeArray(arr) {
+    observeArray(arr,vm) {
+        console.log(arr);
+        if(vm){
+            Object.keys(arr).forEach((key) => {
+                this.defineReactive(vm, vm.length-arr.length +parseInt( key), arr[key]);
+            });
+            return;
+        }
         arr.__proto__ = arrayProxyMethod;  //添加方法，直接遍历子属性
-        arr.forEach(ele => {
-            observe(ele);
-        })
+        // arr.forEach(ele => {
+        //     observe(ele);
+        // })
+        Object.keys(arr).forEach((key) => {
+            this.defineReactive(arr, key, arr[key]);
+        }) 
     }
 }
 
