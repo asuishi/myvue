@@ -140,7 +140,7 @@ export default class Compiler{
 		parentNode.insertBefore(startNode, endNode);
 		// parentNode.removeChild(node);
 		node.removeAttribute("v-for");
-		new watcher(newExp,scope,(newValue)=>{
+		let watch  = new watcher(newExp,scope,(newValue)=>{
 			// debugger
 			// while(parentNode.lastChild){
 			// 	parentNode.removeChild(parentNode.lastChild);
@@ -158,6 +158,12 @@ export default class Compiler{
 				this.compiler(clone,forscope);
 			});
 		})
+		const dos = newExp.split('.');
+		let r = scope;
+		dos.forEach(e =>{
+			r = r[e];
+		})
+		r.__ob__.dep.addSub(watch);
 	}
 
 	ifHandler(exp,scope,node,dir){
@@ -191,9 +197,13 @@ export default class Compiler{
 
 	bindWatch(node,scope,exp,dir,prop){
 		let fn = updater[dir];
-		new watcher(exp,scope,(newValue)=>{
+		let watch = new watcher(exp,scope,(newValue)=>{
 			fn(node,newValue,prop);
 		});
+		let t = scope[exp];
+		if(Array.isArray(t)){
+			t.__ob__.dep.addSub(watch);
+		}
 	}
 
 

@@ -1,4 +1,4 @@
-import observer from "./observer"
+import {observe} from "./observer/index"
 import compiler from "./compiler"
 
 export default class myvue {
@@ -20,7 +20,7 @@ export default class myvue {
         this.$el = typeof options.el === 'string' ? document.querySelector(options.el) : options.el || document.body;
 
 
-        new observer(this.$data);
+        observe(this.$data);
 
         this._proxy(options);
         this._proxyComputed(options);

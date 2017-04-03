@@ -17,6 +17,12 @@ window.ob = new myvue({
 	            { label: '互联网社区的9大特征2' }
 	        ]
 	    }],
+	    items3:[
+	        [
+	            { label: '互联网社区的9大特征1' },
+	            { label: '互联网社区的9大特征2' }
+        	]
+        ],
 	    show: true,
 	    ifshow: true,
 	    urlSrc:'http://www.baidu.com',
