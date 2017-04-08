@@ -1,21 +1,25 @@
 import {observe} from "./observer/index"
-import compiler from "./compiler"
+import compiler from "./compiler/compile"
+import directives from "./directives/index"
+
+
 
 export default class myvue {
     constructor(options) {
         // this._data = (new observer(data)).data;
-
         options = Object.assign({}, // 添加默认属性
             {
                 computed: {},
                 methods: {},
                 data: {},
             },
-            options
+            options,
+            myvue.options
         );
 
         this.$options = options;
         this.$data = options.data;
+        this.$compiler = compiler;
 
         this.$el = typeof options.el === 'string' ? document.querySelector(options.el) : options.el || document.body;
 
@@ -81,3 +85,8 @@ export default class myvue {
         });
     }
 }
+
+myvue.options = {
+    directives
+};
+window.myvue = myvue;

@@ -30,7 +30,7 @@ function deepCopy(from) {
 }
 
 // 忽略注释节点和换行节点
-function isIgnorable(node) {
+export function isIgnorable(node) {
 	// ignore comment node || a text node
 	var regIgnorable = /^[\t\n\r]+$/;
 	return (node.nodeType == 8) || ((node.nodeType == 3) && (regIgnorable.test(node.textContent)));
@@ -107,4 +107,4 @@ function parseStyleExp(exp,scope) {
 }
 
 
-export default {toString,slice,isEqual,deepCopy,isIgnorable,parseClassExp,parseStyleExp}
+export default {toString,slice,isEqual,deepCopy,parseClassExp,parseStyleExp}

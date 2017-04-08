@@ -22,18 +22,19 @@
 <body>
     <div id='root'>
        <input type="text" v-model="text" /> {{text}}
+       <div v-text="text"></div>
         <div>
             <button v-on:click="doclick">点击</button>
-            <div v-text="text"></div>
+            
         </div>
 
         <div>{{aDouble}}</div>
-        <div>{{a}}{{aPlus}}</div>
+        <div>{{aPlus}}</div>
         <div>
             <input type="checkbox" v-model="checkbox" />
             <label for="checkbox">{{ checkbox }}</label>
         </div>
-        <div>
+         <div>
             <input type="checkbox" id="jack" value="Jack" v-model="checkArray">
             <label for="jack">Jack</label>
             <input type="checkbox" id="john" value="John" v-model="checkArray">
@@ -75,17 +76,17 @@
             <div class="show">
                 <ul >
                     <li v-for='it in item'>
+                    {{$index}}
                         <label >{{it.label}}</label>
                     </li>
                 </ul>
             </div>
         </li>
-        </ul>
+        </ul> 
          
-
+        
         <div v-show="show">{{text}}</div>
-
-        <div v-if="ifshow">{{text}}</div>
+         <div v-if="ifshow">{{text}}</div>
 
 
         <div class="black">v-bind test</div>
@@ -105,7 +106,7 @@
 
         <div style = "background-color: black" v-bind:style="[styleObjectA, styleObjectB]">{{styleObjectA}}</div>
 
-        <div v-bind:style="styleObject">styleObject</div></div>
+        <div v-bind:style="styleObject">styleObject</div></div> 
 
     </div>
 </body>
