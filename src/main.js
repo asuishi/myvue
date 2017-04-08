@@ -2,6 +2,8 @@ import {observe} from "./observer/index"
 import compiler from "./compiler/compile"
 import directives from "./directives/index"
 
+import dataAPI from './instance/api/data'
+
 
 
 export default class myvue {
@@ -20,6 +22,7 @@ export default class myvue {
         this.$options = options;
         this.$data = options.data;
         this.$compiler = compiler;
+        dataAPI(myvue);
 
         this.$el = typeof options.el === 'string' ? document.querySelector(options.el) : options.el || document.body;
 
@@ -29,7 +32,9 @@ export default class myvue {
         this._proxy(options);
         this._proxyComputed(options);
         this._proxyMethods(options.methods);
+
         new compiler(this.$el, this);
+        this.initWatch();
     }
 
     _proxy(options) {
@@ -84,9 +89,25 @@ export default class myvue {
             this[m] = this.$options.methods[m];
         });
     }
+
+
+    initWatch(){
+        registerCallbacks(this,'$watch',this.$options.watch);
+    }
 }
 
 myvue.options = {
     directives
 };
 window.myvue = myvue;
+
+function registerCallbacks(scope,action,hash){
+    if(!hash){
+        return;
+    }
+    let key;
+
+    for(let key in hash){
+       scope[action](key,hash[key].bind(scope)) 
+    }
+}

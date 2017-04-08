@@ -1,8 +1,6 @@
 import { isIgnorable } from '../utils/index';
 import utils from '../utils/index';
 
-import watcher from '../watcher';
-
 import Directive from '../directive'
 
 import { parseDirective } from "../parse/directive"
@@ -74,71 +72,6 @@ export default class Compiler {
             this.compiler(node, vm);
         }
     }
-
-    /**
-    	系列指令处理函数 model text on
-    */
-
-    forHandler(exp, scope, node, dir) {
-        let expObj = exp.split("in");
-        let newExp = expObj[1].trim();
-        let item = expObj[0].trim();
-        let parentNode = node.parentNode;
-        let startNode = document.createTextNode('');
-        let endNode = document.createTextNode('');
-        let range = document.createRange();
-        parentNode.replaceChild(endNode, node); // 去掉原始模板
-        parentNode.insertBefore(startNode, endNode);
-        // parentNode.removeChild(node);
-        node.removeAttribute("v-for");
-        let watch = new watcher(newExp, scope, (newValue) => {
-            // debugger
-            // while(parentNode.lastChild){
-            // 	parentNode.removeChild(parentNode.lastChild);
-            // }
-            range.setStart(startNode, 0);
-            range.setEnd(endNode, 0);
-            range.deleteContents();
-            newValue.forEach((val, index) => {
-                let clone = node.cloneNode(true);
-                let forscope = Object.create(scope);
-                forscope.$index = index;
-                forscope[item] = val;
-                parentNode.insertBefore(clone, endNode);
-                // debugger
-                this.compiler(clone, forscope);
-            });
-        })
-        const dos = newExp.split('.');
-        let r = scope;
-        dos.forEach(e => {
-            r = r[e];
-        })
-        r.__ob__.dep.addSub(watch);
-    }
-
-    ifHandler(exp, scope, node, dir) {
-        this.compiler(node, scope);
-        const refNode = document.createTextNode('');
-        node.parentNode.insertBefore(refNode, node);
-        node.parentNode.removeChild(node);
-        this.bindWatch(node, scope, exp, dir, refNode)
-            // this.bindWatch(node,scope,exp,dir);
-    }
-
-    bindWatch(node, scope, exp, dir, prop) {
-        let fn = updater[dir];
-        let watch = new watcher(exp, scope, (newValue) => {
-            fn(node, newValue, prop);
-        });
-        let t = scope[exp];
-        if (Array.isArray(t)) {
-            t.__ob__.dep.addSub(watch);
-        }
-    }
-
-
-
 }
 
 function nodeToFragment(node) {

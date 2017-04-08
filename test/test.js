@@ -49,6 +49,7 @@ window.ob = new myvue({
 		    'font-size': '13px'
 		},
 		a:1,
+		awatch:'watch',
 	},
 	computed: {
 		// 仅读取，值只须为函数
@@ -63,6 +64,11 @@ window.ob = new myvue({
 			set: function(v) {
 				this.a = v - 1
 			}
+		}
+	},
+	watch:{
+		a:function(newValue){
+			this.awatch = newValue + "watch";
 		}
 	},
 	methods:{
