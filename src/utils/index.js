@@ -2,10 +2,10 @@ const toString = {}.toString;
 const slice = Array.prototype.slice;
 
 function isEqual(a, b) {
-	return a == b || (
+	return (
 		isObject(a) && isObject(b)
 			? JSON.stringify(a) === JSON.stringify(b)
-			: false
+			: a == b
 	)
 }
 

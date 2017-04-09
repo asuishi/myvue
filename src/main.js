@@ -32,9 +32,10 @@ export default class myvue {
         this._proxy(options);
         this._proxyComputed(options);
         this._proxyMethods(options.methods);
+        this.initWatch();
 
         new compiler(this.$el, this);
-        this.initWatch();
+        
     }
 
     _proxy(options) {
