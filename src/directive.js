@@ -12,7 +12,6 @@ export default class Directive{
 		this.name = descriptor.name; // 指令名
   		this.expression = descriptor.expression; // 绑定的data
   		this.prop = descriptor.prop;
-
   		this._bind();
 	}
 
@@ -24,7 +23,7 @@ export default class Directive{
   		if(this.prop){
   			attr += `:${this.prop}`;
   		}
-    	this.node.removeAttribute && this.node.removeAttribute(attr)
+    	this.node && this.node.removeAttribute && this.node.removeAttribute(attr)
 
 		// 更新函数
 		let def = descriptor.def
@@ -47,12 +46,33 @@ export default class Directive{
 			this._update = noop;
 		}
 
-		let watcher = this._watcher = new Watcher(
+		let watcher;
+		watcher = this._watcher = new Watcher(
 			this.expression,
 			this.vm,
 			this._update, // callback
 			this.prop
 		);
+
+
+		//指令
+		/*if(this.name === 'prop'){
+			watcher = this._watcher = new Watcher(
+				this.expression.raw,
+				this.vm.$parent,
+				this._update, // callback
+				this.prop
+			);
+		}else{
+			watcher = this._watcher = new Watcher(
+				this.expression,
+				this.vm,
+				this._update, // callback
+				this.prop
+			);
+		}*/
+
+		
 		let t = this.vm[this.expression];
         if (Array.isArray(t)) {
             t.__ob__.dep.addSub(watcher);

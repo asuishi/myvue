@@ -6,6 +6,7 @@ import bind from "./bind";
 import vif from "./if";
 import vfor from "./for";
 import component from "./component";
+import prop from "./prop";
 export default {
     text,
     model,
@@ -14,5 +15,6 @@ export default {
     bind,
     'if':vif,
     'for':vfor,
-    component
+    component,
+    prop
 }

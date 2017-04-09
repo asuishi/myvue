@@ -22,9 +22,9 @@
 <body>
     <div id='root'>
 
-        <my-component></my-component>
+    <child myMessage="hello!" :dynamic = "text"></child>
 
-      <!--  <input type="text" v-model="text" /> {{text}}
+       <input type="text" v-model="text" /> {{text}}
        <div v-text="text"></div>
         <div>
             <button v-on:click="doclick">点击</button>
@@ -110,7 +110,7 @@
 
         <div style = "background-color: black" v-bind:style="[styleObjectA, styleObjectB]">{{styleObjectA}}</div>
 
-        <div v-bind:style="styleObject">styleObject</div></div>  -->
+        <div v-bind:style="styleObject">styleObject</div></div> 
 
     </div>
 </body>

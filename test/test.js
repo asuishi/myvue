@@ -1,14 +1,18 @@
 let myvue = require("../dist/bundle.js");
 var MyComponent = myvue.extend({
-    template: '<p>ffsddfd</p>'
+    props: {
+    	myMessage:'',
+    	dynamic:'',
+    },
+    template: '<div><span>{{ myMessage }}</span><div>{{ dynamic }}</div></d'
 });
 
-myvue.component('my-component', MyComponent);
+myvue.component('child', MyComponent);
 
 window.ob = new myvue({
 	el:'#root', 
 	data:{
-	    text: 'text',
+	    text: 'texfgt',
 	    checkbox: true,
 	    checkArray: ['Jack'],
 	    picked: '',

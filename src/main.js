@@ -5,13 +5,13 @@ import directives from "./directives/index"
 import dataAPI from './instance/api/data'
 
 import installGlobalAPI from './global-api'
+import {compileProps,applyProps} from './compiler/compile-props'
 
 
 
 export default class myvue {
     constructor(options) {
 
-       
         this._init(options);
     }
 
@@ -31,6 +31,15 @@ export default class myvue {
         this.$options = options;
         this.$data = options.data;
         this.$compiler = compiler;
+        this.$children = [];
+
+
+        this.$parent = options.parent; // 组件
+        if(this.$parent){
+            this.$parent.$children.push(this);
+        }
+
+        this._initProps(options);       
         
         observe(this.$data);
 
@@ -95,6 +104,16 @@ export default class myvue {
         });
     }
 
+
+
+    _initProps(options){
+        let {props,el,isComponent} = options;
+        let compiledProps;
+        if(isComponent){
+           compiledProps = compileProps(el,props,this);
+           applyProps(compiledProps,this);
+        }
+    }
 
     initWatch(){
         registerCallbacks(this,'$watch',this.$options.watch);
