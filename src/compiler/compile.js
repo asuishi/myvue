@@ -5,16 +5,18 @@ import Directive from '../directive'
 
 import { parseDirective } from "../parse/directive"
 
+import _initElement from './transclude'
+
 export default class Compiler {
-    constructor(el, vm) {
-        this.$el = el;
+    constructor(options, vm) {
+        
+        let $el = vm.$el =  _initElement(options);
         this.$vm = vm;
-        this.$fragment = nodeToFragment(this.$el);
+        this.$fragment = nodeToFragment($el);
         this.compiler(this.$fragment, this.$vm, vm);
-        this.$el.appendChild(this.$fragment);
+        vm.$el.appendChild(this.$fragment);
 
     }
-
 
     compiler(fragment, vm) {
         utils.slice.call(fragment.childNodes).forEach(ele => {
@@ -56,6 +58,9 @@ export default class Compiler {
         	v-model, v-text, v-bind, v-on, v-for, v-if等
         */
     compileElementNode(node, vm) {
+        if(_checkComponentDirs(node,vm)){
+            return;   
+        }
         let attrs = utils.slice.call(node.attributes);
         let lazy = false;
         attrs.forEach(attr => {
@@ -102,3 +107,23 @@ function getDirective(attr,options) {
     }
     return token;
 }
+
+/**
+ * 判断节点是否是组件指令,如 <my-component></my-component>
+ * 如果是,则构建组件指令
+ * @param node {Element}
+ * @returns {boolean}
+ * @private
+ */
+function _checkComponentDirs(node,vm) {
+    let options = vm.$options;
+    let tagName = node.tagName.toLowerCase();
+    if (options.components[tagName]) {
+        let token = {
+            def:options.directives['component'],
+            name:tagName,
+        }
+        new Directive(token, vm, node)
+        return true;
+    }
+};

@@ -4,11 +4,20 @@ import directives from "./directives/index"
 
 import dataAPI from './instance/api/data'
 
+import installGlobalAPI from './global-api'
+
 
 
 export default class myvue {
     constructor(options) {
-        // this._data = (new observer(data)).data;
+
+       
+        this._init(options);
+    }
+
+
+    _init(options){
+         // this._data = (new observer(data)).data;
         options = Object.assign({}, // 添加默认属性
             {
                 computed: {},
@@ -16,17 +25,13 @@ export default class myvue {
                 data: {},
             },
             options,
-            myvue.options
+            this.constructor.options
         );
 
         this.$options = options;
         this.$data = options.data;
         this.$compiler = compiler;
-        dataAPI(myvue);
-
-        this.$el = typeof options.el === 'string' ? document.querySelector(options.el) : options.el || document.body;
-
-
+        
         observe(this.$data);
 
         this._proxy(options);
@@ -34,8 +39,7 @@ export default class myvue {
         this._proxyMethods(options.methods);
         this.initWatch();
 
-        new compiler(this.$el, this);
-        
+        new compiler(options, this);
     }
 
     _proxy(options) {
@@ -96,9 +100,12 @@ export default class myvue {
         registerCallbacks(this,'$watch',this.$options.watch);
     }
 }
+dataAPI(myvue);
+installGlobalAPI(myvue);
 
 myvue.options = {
-    directives
+    directives,
+    components:{},
 };
 window.myvue = myvue;
 

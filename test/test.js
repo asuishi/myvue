@@ -1,4 +1,10 @@
 let myvue = require("../dist/bundle.js");
+var MyComponent = myvue.extend({
+    template: '<p>ffsddfd</p>'
+});
+
+myvue.component('my-component', MyComponent);
+
 window.ob = new myvue({
 	el:'#root', 
 	data:{
@@ -50,6 +56,7 @@ window.ob = new myvue({
 		},
 		a:1,
 		awatch:'watch',
+		message:'components message',
 	},
 	computed: {
 		// 仅读取，值只须为函数
