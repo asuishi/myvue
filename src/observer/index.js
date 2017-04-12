@@ -42,7 +42,18 @@ class Observer {
             enumerable: true, // 枚举
             configurable: true, // 不可再配置
             get() {
-                Dep.target && dep.addSub(Dep.target);
+                if(Dep.target){
+                    dep.addSub(Dep.target);
+                    if(Array.isArray(val)){
+                        if (childObj) {   // 一维数组
+                          childObj.dep.addSub(Dep.target);
+                        }
+                        for (let e, i = 0, l = val.length; i < l; i++) { // 多维数组
+                          e = val[i];
+                          e && e.__ob__ && e.__ob__.dep.addSub(Dep.target);
+                        }
+                    }
+                } 
                 return val;
             },
             set(newValue) {

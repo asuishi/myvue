@@ -71,11 +71,5 @@ export default class Directive{
 				this.prop
 			);
 		}*/
-
-		
-		let t = this.vm[this.expression];
-        if (Array.isArray(t)) {
-            t.__ob__.dep.addSub(watcher);
-        }
 	}
 }
