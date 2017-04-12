@@ -34,7 +34,7 @@ export default {
                 forscope[this.item] = val;
                 this.parentNode.insertBefore(clone, this.endNode);
                 // debugger
-                new this.vm.$compiler(clone, forscope);
+                new this.vm.$compiler({el:clone}, forscope);
             });
 	}
 }

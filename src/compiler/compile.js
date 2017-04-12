@@ -13,7 +13,7 @@ export default class Compiler {
         let $el = vm.$el =  _initElement(options);
         this.$vm = vm;
         this.$fragment = nodeToFragment($el);
-        this.compiler(this.$fragment, this.$vm, vm);
+        this.compiler(this.$fragment, this.$vm);
         vm.$el.appendChild(this.$fragment);
 
     }
