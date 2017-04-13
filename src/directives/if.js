@@ -13,9 +13,12 @@ export default {
     update(val) {
         let node = this.node,
         	prop = this.prop,
+            scope = this.vm,
         	refNode = this.refNode;
        	if(val){
-			refNode.parentNode.insertBefore(node,refNode);
+            let clone = this.node.cloneNode(true);
+			refNode.parentNode.insertBefore(clone,refNode);
+            new this.vm.$compiler({el:clone}, scope);
 		}else{
 			refNode.parentNode.removeChild(node);
 		}

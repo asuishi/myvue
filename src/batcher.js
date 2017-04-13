@@ -1,6 +1,5 @@
 /**
  * 批处理构造函数
- * @constructor
  */
 class Batcher{
 	constructor(){
@@ -23,7 +22,6 @@ class Batcher{
 	            setTimeout(() => {
 	                // isFlushing, 此字段用来处理多重异步队列的问题
 	                this.isFlushing = true;
-	                console.log("real update##########");
 	                this.flush();
 	                this.isFlushing = false;
 	            });

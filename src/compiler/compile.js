@@ -18,10 +18,20 @@ export default class Compiler {
 
     }
 
+
+
     compiler(fragment, vm) {
-        utils.slice.call(fragment.childNodes).forEach(ele => {
+        if(fragment.hasChildNodes()){
+            this.compilerNodeList(fragment.childNodes,vm)
+        }
+    }
+
+    compilerNodeList(nodeList,vm){
+        let ele;
+        for(let i=0,len=nodeList.length;i<len;i++){
+            ele = nodeList[i];
             if (isIgnorable(ele)) {
-                return;
+                continue;
             }
             switch (ele.nodeType) {
                 case 1:
@@ -33,7 +43,7 @@ export default class Compiler {
                 default:
                     break;
             }
-        })
+        }
     }
 
     compileTextNode(node, vm) {
@@ -53,32 +63,43 @@ export default class Compiler {
         token && (new Directive(token,vm,node));
 
     }
-        /**
-        	节点元素，可能的指令有 
-        	v-model, v-text, v-bind, v-on, v-for, v-if等
-        */
+    /**
+    	节点元素，可能的指令有 
+    	v-model, v-text, v-bind, v-on, v-for, v-if等
+    */
     compileElementNode(node, vm) {
-        if(_checkComponentDirs(node,vm)){
-            return;   
+
+        
+
+        let attrs = node.hasAttributes() && utils.slice.call(node.attributes);
+
+        let terminal; // 是否有 终止 指令
+        let lazy;
+
+        if(attrs){
+            terminal = _checkTerminalDirectives(node,attrs,vm);
         }
-        let attrs = utils.slice.call(node.attributes);
-        let lazy = false;
-        attrs.forEach(attr => {
-            let token = getDirective(attr,vm.$options);
-            if (token) {
-                 // 绑定指令
-                new Directive(token,vm,node);
-                if (token.name === 'for') {
-                    lazy = true;
-                }
+
+        if(!terminal){
+            if(_checkComponentDirs(node,vm)){
+                return;   
             }
-        });
-        if (!lazy) {
-            this.compiler(node, vm);
         }
+        if(!terminal &&　attrs){
+            attrs.forEach(attr => {
+                let token = getDirective(attr,vm.$options);
+                if (token) {
+                     // 绑定指令
+                    new Directive(token,vm,node);
+                    
+                }
+            });
+        }
+        if(!terminal){
+            this.compiler(node, vm);
+        }  
     }
 }
-
 function nodeToFragment(node) {
     let fragment = document.createDocumentFragment(),
         child;
@@ -106,6 +127,31 @@ function getDirective(attr,options) {
         }
     }
     return token;
+}
+
+
+// 高优先级指令
+const PRIORITY_DIRECTIVES = ['for','if'];
+
+function _checkTerminalDirectives(node,attrs,vm){
+    let priorityAttr;
+    let attr;
+    for(let j=0,l=attrs.length;j<l;j++){
+        attr = attrs[j];
+        for(let i=0,len=PRIORITY_DIRECTIVES.length;i<len;i++){
+            priorityAttr = 'v-' + PRIORITY_DIRECTIVES[i];
+        
+            if(attr.name == priorityAttr ){
+                let directive = getDirective(attr,vm.$options);
+                if (directive) {
+                     // 绑定指令
+                    new Directive(directive,vm,node);
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 /**

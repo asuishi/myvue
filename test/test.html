@@ -104,13 +104,13 @@
             <span>{{activeClass}}</span>
         </div>
 
-        <div v-bind:class="classObject">fsdfdsfsf</div>
+        <div v-bind:class="classObject" v-show="show">fsdfdsfsf</div>
 
         <div v-bind:style="{ color: activeColor, font-size: fontSize + 'px' }">fdfdff</div>
 
         <div style = "background-color: black" v-bind:style="[styleObjectA, styleObjectB]">{{styleObjectA}}</div>
 
-        <div v-bind:style="styleObject">styleObject</div></div> 
+        <div v-bind:style="styleObject" v-bind:class="classObject">styleObject</div></div> 
 
     </div>
 </body>
