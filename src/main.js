@@ -23,6 +23,7 @@ export default class myvue {
                 computed: {},
                 methods: {},
                 data: {},
+                props:{},
             },
             options,
             this.constructor.options
@@ -109,7 +110,7 @@ export default class myvue {
     _initProps(options){
         let {props,el,isComponent} = options;
         let compiledProps;
-        if(isComponent){
+        if(isComponent ){
            compiledProps = compileProps(el,props,this);
            applyProps(compiledProps,this);
         }

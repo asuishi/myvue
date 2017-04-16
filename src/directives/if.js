@@ -16,7 +16,7 @@ export default {
             scope = this.vm,
         	refNode = this.refNode;
        	if(val){
-            let clone = this.node.cloneNode(true);
+            let clone = this.node =  this.node.cloneNode(true);
 			refNode.parentNode.insertBefore(clone,refNode);
             new this.vm.$compiler({el:clone}, scope);
 		}else{
