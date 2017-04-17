@@ -1,7 +1,11 @@
 import Watcher from "./watcher";
 
+import {isSimplePath,computeExpression} from './parse/expression';
+
 
 function noop () {}
+
+
 
 export default class Directive{
 	constructor(descriptor,vm,node){
@@ -46,13 +50,24 @@ export default class Directive{
 			this._update = noop;
 		}
 
-		let watcher;
-		watcher = this._watcher = new Watcher(
-			this.expression,
-			this.vm,
-			this._update, // callback
-			this.prop
-		);
+
+		if(isSimplePath(this.expression)){  // 简答表达式 watcher 中处理
+
+			let watcher;
+			watcher = this._watcher = new Watcher(
+				this.expression,
+				this.vm,
+				this._update, // callback
+				this.prop
+			);
+		} else {
+		    let fn = computeExpression(this.expression);
+		    let scope = this.vm;
+		    let handler = function(e) {
+		        fn.call(scope, scope)
+		    }
+		    this.update(handler)
+		}
 
 
 		//指令

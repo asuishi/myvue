@@ -4,6 +4,11 @@ export default {
 	    prop = this.prop,
 	    scope = this.vm,
 	    expression = this.expression;
-        node.addEventListener(prop, scope[expression].bind(scope))
+	    if(typeof value == "function"){
+	    	node.addEventListener(prop, value.bind(scope))
+	    }else{
+	        node.addEventListener(prop, scope[expression].bind(scope))
+	    }
+
     }
 }

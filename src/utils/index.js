@@ -51,19 +51,19 @@ function parseClassExp(exp,scope) {
 	if (regObj.test(exp)) {
 		var subExp = exp.replace(/[\s\{\}]/g, '').split(',');
 		subExp.forEach(function (sub) {
-			var key = '"' + sub.split(':')[0].replace(/['"`]/g, '') + ' "';
+			var key = sub.split(':')[0].replace(/['"`]/g, '');
 			var value = sub.split(':')[1];
-			result.push('((' + value + ')?' + key + ':"")')
+			result.push(`(${value}?'${key} ':'')`);
 		});
 	} else if (regArr.test(exp)) {
 		var subExp = exp.replace(/[\s\[\]]/g, '').split(',');
 		result = subExp.map(function (sub) {
-			return '(' + sub + ')' + '+" "';
+			return `(${sub})+' '`;
 		});
 	}else{
 		let e  = scope[exp];
 		for(let cls in e){
-			result.push( '((' + exp +'["'+cls+'"])?"' +cls + ' ":"")' );
+			result.push( `(${exp}['${cls}']?'${cls} ' :'')` );
 		}
 	}
 	return result.join('+');  // 拼成 (a?"acls ":"")+(b?"bcls ":"")的形式

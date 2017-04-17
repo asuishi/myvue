@@ -1,6 +1,7 @@
 import Dep from './dep'
 import utils from './utils/index'
 import Batcher from './batcher'
+import {parseExpression,computeExpression} from './parse/expression'
 
 
 const batcher = Batcher();
@@ -37,34 +38,7 @@ export default class Watcher{
 	}
 	
 	get(){
-		let result = '';
-		result = computeExpression(this.exp,this.scope);
-		return result;
+		let fn = computeExpression(this.exp,this.scope);
+		return fn(this.scope);
 	}
-}
-
-/**`
- * 解析表达式
- */
-function computeExpression(exp, scope) {
-	let realExp = addScope(exp);
-	let fn = new Function('scope','return '  + realExp);
-	return fn(scope);
-}
-
-/**
-* 为变量添加作用域
-*/
-
-function addScope(exp){
-	let realExp;
-	const reg = /\(([^\(\)]+)\)/g;
-	if(reg.test(exp)){
-		realExp = exp.replace(reg,(match,group)=>{
-			return 'scope.' + group;
-		})
-	}else{
-		realExp = "scope." + exp;
-	}
-	return realExp;
 }
