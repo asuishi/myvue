@@ -1,6 +1,8 @@
 import Directive from '../directive'
 
-export function compileProps(el,propOptions,vm){
+const eventRE = /^v-on:|^@/
+
+export function compileProps(el,propOptions){
 	let  names = Object.keys(propOptions);
 	let props = [];
 
@@ -21,6 +23,23 @@ export function compileProps(el,propOptions,vm){
         props.push(prop);
 	})
 	return props;
+}
+
+export function registerComponentEvents(el,vm){
+	let attrs = el.attributes;
+	let name,value,attr;
+	for (let i = 0, l = attrs.length; i < l; i++) {
+		attr = attrs[i];
+		name = attr.name;
+		if(eventRE.test(name)){  // v-on or @
+			name = name.replace(eventRE,'');
+			value = attr.value;
+			vm.$on(name,(args)=>{
+				vm.$parent[value].apply(vm.$parent,args)
+			})
+		}
+	}
+
 }
 
 

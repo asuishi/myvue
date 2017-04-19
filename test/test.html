@@ -22,7 +22,7 @@
 
 <body>
     <div id='root'>
-        <child myMessage="hello!" :dynamic="text"></child>
+        <child myMessage="hello!" :dynamic="text" @event="componentEvent"></child>
         <input type="text" v-model="text" /> {{text}}
         <div v-text="text"></div>
         <div>

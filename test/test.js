@@ -4,7 +4,12 @@ var MyComponent = myvue.extend({
     	myMessage:'',
     	dynamic:'',
     },
-    template: '<div><span>{{ myMessage }}</span><div>{{ dynamic }}</div></d'
+    methods:{
+    	input:function(){
+    		this.$emit('event');
+    	}
+    },
+    template:'<div><span>{{ myMessage }}</span><div v-on:click="input">{{ dynamic }}</div></div>'
 });
 
 myvue.component('child', MyComponent);
@@ -86,10 +91,14 @@ window.ob = new myvue({
 		doclick: function() {
 	        this.text = "text"
 	        this.$emit("a",this.text);
+	    },
+	    componentEvent:function(){
+	    	console.log('componentEvent');
+	    	this.text = "vm.$parent"
 	    }
 	}
 });
 
 ob.$on("a",(args)=>{
-	alert("a is invoke " + args);
+	console.log("a is invoke " + args);
 })

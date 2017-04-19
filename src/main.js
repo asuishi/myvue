@@ -7,7 +7,7 @@ import eventAPI from './instance/api/events'
 
 
 import installGlobalAPI from './global-api'
-import {compileProps,applyProps} from './compiler/compile-props'
+import {compileProps,applyProps,registerComponentEvents} from './compiler/compile-props'
 
 
 
@@ -44,7 +44,8 @@ export default class myvue {
             this.$parent.$children.push(this);
         }
 
-        this._initProps(options);     
+        this._initProps(options);
+        this._initEvents(options);     
         
         observe(this.$data);
 
@@ -117,6 +118,13 @@ export default class myvue {
         if(isComponent ){
            compiledProps = compileProps(el,props,this);
            applyProps(compiledProps,this);
+        }
+    }
+
+    _initEvents(options){
+        let {el,isComponent} = options; 
+        if(isComponent){
+            registerComponentEvents(el,this);
         }
     }
 
