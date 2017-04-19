@@ -3,6 +3,8 @@ import compiler from "./compiler/compile"
 import directives from "./directives/index"
 
 import dataAPI from './instance/api/data'
+import eventAPI from './instance/api/events'
+
 
 import installGlobalAPI from './global-api'
 import {compileProps,applyProps} from './compiler/compile-props'
@@ -34,13 +36,15 @@ export default class myvue {
         this.$compiler = compiler;
         this.$children = [];
 
+        this._events = {}; // 事件
+
 
         this.$parent = options.parent; // 组件
         if(this.$parent){
             this.$parent.$children.push(this);
         }
 
-        this._initProps(options);       
+        this._initProps(options);     
         
         observe(this.$data);
 
@@ -121,6 +125,7 @@ export default class myvue {
     }
 }
 dataAPI(myvue);
+eventAPI(myvue);
 installGlobalAPI(myvue);
 
 myvue.options = {

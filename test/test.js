@@ -85,6 +85,11 @@ window.ob = new myvue({
 	methods:{
 		doclick: function() {
 	        this.text = "text"
+	        this.$emit("a",this.text);
 	    }
 	}
 });
+
+ob.$on("a",(args)=>{
+	alert("a is invoke " + args);
+})

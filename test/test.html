@@ -5,32 +5,29 @@
     <meta charset="utf-8">
     <title>Webpack Sample Project</title>
     <style>
-        #black {
-            background-color: black;
-            color: white;
-        }
-
-        .active{
-            background-color: blue;
-        }
-        .text-danger{
-            color: red
-        }
+    #black {
+        background-color: black;
+        color: white;
+    }
+    
+    .active {
+        background-color: blue;
+    }
+    
+    .text-danger {
+        color: red
+    }
     </style>
 </head>
 
 <body>
     <div id='root'>
-
-    <child myMessage="hello!" :dynamic = "text"></child>
-
-       <input type="text" v-model="text" /> {{text}}
-       <div v-text="text"></div>
+        <child myMessage="hello!" :dynamic="text"></child>
+        <input type="text" v-model="text" /> {{text}}
+        <div v-text="text"></div>
         <div>
             <button v-on:click="doclick">点击</button>
-            
         </div>
-
         <div>{{aDouble}}</div>
         <div>{{aPlus}}</div>
         <div>{{awatch}}</div>
@@ -38,7 +35,7 @@
             <input type="checkbox" v-model="checkbox" />
             <label for="checkbox">{{ checkbox }}</label>
         </div>
-         <div>
+        <div>
             <input type="checkbox" id="jack" value="Jack" v-model="checkArray">
             <label for="jack">Jack</label>
             <input type="checkbox" id="john" value="John" v-model="checkArray">
@@ -46,7 +43,6 @@
             <input type="checkbox" id="mike" value="Mike" v-model="checkArray">
             <label for="mike">Mike</label>
             <br>
-        
             <label for="checkbox">{{ checkArray }}</label>
         </div>
         <input type="radio" name="test" id="one" value="One" v-model="picked">
@@ -56,62 +52,49 @@
         <label for="two">Two</label>
         <br>
         <span>Picked: {{ picked }}</span>
-
-
         <ul id="example-1">
-          <li v-for="item in items">
-            {{ item.message }}
-          </li>
+            <li v-for="item in items">
+                {{ item.message }}
+            </li>
         </ul>
         <ul>
-         <li class="main-data-list" v-for='item in items2'>
-            <p class="tab">{{item.tab}}</p>
-            <div class="show">
-                <ul >
-                    <li v-for='it in item.datalist'>
-                        <label >{{it.label}}</label>
-                    </li>
-                </ul>
-            </div>
-        </li>
+            <li class="main-data-list" v-for='item in items2'>
+                <p class="tab">{{item.tab}}</p>
+                <div class="show">
+                    <ul>
+                        <li v-for='it in item.datalist'>
+                            <label>{{it.label}}</label>
+                        </li>
+                    </ul>
+                </div>
+            </li>
         </ul>
-         <ul>
-         <li class="main-data-list" v-for='item in items3'>
-            <div class="show">
-                <ul >
-                    <li v-for='it in item'>
-                    {{$index}}
-                        <label >{{it.label}}</label>
-                    </li>
-                </ul>
-            </div>
-        </li>
-        </ul> 
-         
-        
+        <ul>
+            <li class="main-data-list" v-for='item in items3'>
+                <div class="show">
+                    <ul>
+                        <li v-for='it in item'>
+                            {{$index}}
+                            <label>{{it.label}}</label>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
         <div v-show="show">{{text}}</div>
-         <div v-if="ifshow">{{text}}</div>
-
-
+        <div v-if="ifshow">{{text}}</div>
         <div class="black">v-bind test</div>
         <a v-bind:href="urlSrc" v-bind:id="id" target="_blank">{{urlSrc}} </a>
-
-        <div class="static static2 test"
-            v-bind:class="{ active: isActive, 'text-danger': hasError }">class object
+        <div class="static static2 test" v-bind:class="{ active: isActive, 'text-danger': hasError }">class object
         </div>
-
-        <div  v-bind:class="[activeClass, errorClass]">
+        <div v-bind:class="[activeClass, errorClass]">
             <span>{{activeClass}}</span>
         </div>
-
         <div v-bind:class="classObject" v-show="show">fsdfdsfsf</div>
-
         <div v-bind:style="{ color: activeColor, font-size: fontSize + 'px' }">fdfdff</div>
-
-        <div style = "background-color: black" v-bind:style="[styleObjectA, styleObjectB]">{{styleObjectA}}</div>
-
-        <div v-bind:style="styleObject" v-bind:class="classObject">styleObject</div></div> 
-
+        <div style="background-color: black" v-bind:style="[styleObjectA, styleObjectB]">{{styleObjectA}}</div>
+        <div v-bind:style="styleObject" v-bind:class="classObject">styleObject</div>
+    </div>
     </div>
 </body>
 
