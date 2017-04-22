@@ -1,3 +1,5 @@
+import {nextTick} from  '../../utils/env'
+
 export default function(myVue) {
     myVue.prototype.$on = function(event,fn) {
 		(this._events[event] || (this._events[event] = [])).push(fn);
@@ -17,5 +19,9 @@ export default function(myVue) {
     			fn.apply(this,args);
     		});
     	}
+    }
+
+    myVue.prototype.$nextTick = function(cb) {
+        nextTick(cb,this);
     }
 }

@@ -1,4 +1,13 @@
 let myvue = require("../dist/bundle.js");
+
+
+function log(content){
+    console.log(content);
+}
+
+
+
+
 var MyComponent = myvue.extend({
     props: {
     	myMessage:'',
@@ -101,4 +110,11 @@ window.ob = new myvue({
 
 ob.$on("a",(args)=>{
 	console.log("a is invoke " + args);
+})
+
+
+ob.text = 'new message' // 更改数据
+log(ob.$el.querySelector('input').value === 'new message') // false
+ob.$nextTick(function () {
+  log(ob.$el.querySelector('input').value === 'new message') // true
 })

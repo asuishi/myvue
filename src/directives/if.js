@@ -13,7 +13,7 @@ export default {
     update(val) {
         let node = this.node,
         	prop = this.prop,
-            scope = this.vm,
+            scope = Object.create(this.vm),
         	refNode = this.refNode;
        	if(val){
             let clone = this.node =  this.node.cloneNode(true);
