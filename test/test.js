@@ -23,10 +23,17 @@ var MyComponent = myvue.extend({
 
 myvue.component('child', MyComponent);
 
+myvue.directive('html', {
+    update (value) {
+        this.node.innerHTML = value;
+    }
+});
+
 window.ob = new myvue({
 	el:'#root', 
 	data:{
 	    text: 'texfgt',
+        html:"<p>提示：此题考查的是分数混合运算的简便计算。</p><p>解答：带分数可以拆分成一个整数和一个真分数，故：<img latex=\"1\\frac{4}{5} ＝1 + \\frac{4}{5} \" src=\"http://cdn.17zuoye.com/fs-image/118497c220bd8767ec3704a97aa3a727\" width=\"73\" height=\"35\" density=\"105\">，根据乘法分配律进行简便计算：<img latex=\"1\\frac{4}{5} \\times 25＝（1 + \\frac{4}{5} ）\\times 25＝1\\times 25 + \\frac{4}{5} \\times 25\n\" src=\"http://cdn.17zuoye.com/fs-resource/55f290a62ed9b62c8548d93e\" _src=\"http://cdn.17zuoye.com/fs-resource/55f290a62ed9b62c8548d93e\" width=\"373\" height=\"46\">，故此题答案为1。</p>",
 	    checkbox: true,
 	    checkArray: ['Jack'],
 	    picked: '',

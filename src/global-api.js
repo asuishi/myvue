@@ -36,4 +36,9 @@ export default function (myVue) {
         this.options.components[id] = definition;
         return definition;
     };
+
+    myVue.directive = function (id, definition) {
+        this.options.directives[id] = definition;
+        return definition;
+    };
 };
