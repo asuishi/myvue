@@ -34,7 +34,7 @@ class Observer {
      * 数据转换主要函数
      */
     defineReactive(obj, key, val) {
-        let dep = new Dep();
+        let dep = new Dep(obj);
         let self = this;
         let childObj = observe(val); // 递归
 

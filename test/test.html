@@ -2,27 +2,48 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <title>Webpack Sample Project</title>
-    <style>
-        #black {
-            background-color: black;
-            color: white;
-        }
-
-        .active{
-            background-color: blue;
-        }
-        .text-danger{
-            color: red
-        }
-    </style>
+  <meta charset="utf-8">
+  <title>Vuex Examples</title>
+  <script src="../dist/bundle.js"></script>
+  <script src="./myvuex.js"></script>
 </head>
 
-<body>
-    <div id='root'>
-        <div>{{awatch}}</div>
-    </div>
+<body style="padding: 0 20px">
+  <div id="app-5">
+    <p>{{ count }}</p>
+    <button v-on:click="reverseMessage">add</button>
+  </div>
+
+  <script>
+    const store = new myVuex.Store({
+      state: {
+        count: 2,
+        index: 1
+      },
+      strict: true,
+      mutations: {
+        increment(state) {
+          state.count++
+        }
+      }
+    })
+    app5 = new myvue({
+      el: '#app-5',
+      store,
+      data: {
+      },
+      computed: {
+        count() {
+          return this.$store.state.count
+        }
+      },
+      methods: {
+        reverseMessage: function () {
+          this.$store.commit('increment')
+        }
+      }
+    })
+  </script>
 </body>
 
 </html>

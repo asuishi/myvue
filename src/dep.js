@@ -1,5 +1,6 @@
 export default class Dep{
-	constructor(){
+	constructor(key){
+		this.key = key
 		this.subs = [];
 	}
 
@@ -8,6 +9,7 @@ export default class Dep{
 	}
 
 	notify(){
+		var a  = this.key
 		this.subs.forEach(ele=>{
 			ele.update();
 		})

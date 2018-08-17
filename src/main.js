@@ -4,8 +4,6 @@ import directives from "./directives/index"
 
 import dataAPI from './instance/api/data'
 
-
-
 export default class myvue {
     constructor(options) {
         // this._data = (new observer(data)).data;
@@ -22,10 +20,11 @@ export default class myvue {
 
         this.$options = options;
         this.$data = options.data;
-		this.$compiler = compiler;
+        this.$compiler = compiler;
+        this.$store = options.store;
         dataAPI(myvue);
 
-        this.$el = typeof options.el === 'string' ? document.querySelector(options.el) : options.el || document.body;
+        // this.$el = typeof options.el === 'string' ? document.querySelector(options.el) : options.el || document.body;
 
 
         observe(this.$data);
@@ -34,8 +33,12 @@ export default class myvue {
         this._proxyComputed(options);
         this._proxyMethods(options.methods);
 
-        new compiler(this.$el, this);
+        // new compiler(this.$el, this);
         this.initWatch();
+        if (options.el) {
+            this.$el = typeof options.el === 'string' ? document.querySelector(options.el) : options.el || document.body;
+            new compiler(this.$el, this);
+        }
     }
 
     _proxy(options) {
