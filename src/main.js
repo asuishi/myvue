@@ -13,7 +13,8 @@ export default class myvue {
             {
                 computed: {},
                 methods: {},
-                data: {},
+				data: {},
+				watchers: []
             },
             options,
             myvue.options
@@ -21,7 +22,7 @@ export default class myvue {
 
         this.$options = options;
         this.$data = options.data;
-        this.$compiler = compiler;
+		this.$compiler = compiler;
         dataAPI(myvue);
 
         this.$el = typeof options.el === 'string' ? document.querySelector(options.el) : options.el || document.body;

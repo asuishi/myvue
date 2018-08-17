@@ -46,13 +46,13 @@ export default class Directive{
 		} else {
 			this._update = noop;
 		}
-
 		let watcher = this._watcher = new Watcher(
 			this.expression,
 			this.vm,
 			this._update, // callback
 			this.prop
 		);
+		this.vm.$options.watchers.push(watcher)
 		let t = this.vm[this.expression];
         if (Array.isArray(t)) {
             t.__ob__.dep.addSub(watcher);
